@@ -19,6 +19,7 @@ type Job = Box<dyn FnOnce() + Send + 'static>;
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || loop {
+            println!("Worker {id} ready. Waiting for job...");
             let job = receiver.lock().unwrap().recv().unwrap();
 
             println!("Worker {id} got a job. executing...");
